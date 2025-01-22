@@ -12,8 +12,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => FirstScreen());
       case secondScreen:
         return MaterialPageRoute(
-          builder: (_) => SecondPage(
-              youtubeUrl: 'https://www.youtube.com/embed/gkD7TbavRwA'),
+          builder: (_) => SecondPage(),
         );
       default:
         return MaterialPageRoute(

@@ -3,18 +3,17 @@ import 'event.dart';
 import 'state.dart';
 
 class SecondPageBloc extends Bloc<SecondPageEvent, SecondPageState> {
-  SecondPageBloc() : super(VideoLoadingState());
-
-  @override
-  Stream<SecondPageState> mapEventToState(SecondPageEvent event) async* {
-    if (event is LoadVideoEvent) {
+  SecondPageBloc() : super(VideoLoadingState()) {
+    // Register the handler for LoadVideoEvent
+    on<LoadVideoEvent>((event, emit) async {
+      emit(VideoLoadingState());
       try {
-        // Simulate a delay for loading
+        // Simulate a loading delay
         await Future.delayed(Duration(seconds: 2));
-        yield VideoLoadedState();
+        emit(VideoLoadedState());
       } catch (e) {
-        yield VideoErrorState("Failed to load video");
+        emit(VideoErrorState("Failed to load video"));
       }
-    }
+    });
   }
 }

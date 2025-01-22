@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: AppRouter.firstScreen,
+      initialRoute: AppRouter.secondScreen,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

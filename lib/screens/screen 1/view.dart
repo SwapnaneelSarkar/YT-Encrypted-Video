@@ -68,6 +68,7 @@ class _FirstScreenState extends State<FirstScreen>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
+            // Fade-in animation for the video
             AnimatedBuilder(
               animation: _opacityAnimation,
               builder: (context, child) {
@@ -83,21 +84,24 @@ class _FirstScreenState extends State<FirstScreen>
                 child: BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is AuthSuccess) {
-                      Navigator.pushNamed(context, AppRouter.secondScreen);
+                      Navigator.pushNamed(
+                        context,
+                        AppRouter.secondScreen,
+                      );
                     } else if (state is AuthFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Invalid Code')),
+                        const SnackBar(content: Text('Invalid Code')),
                       );
                     }
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Futuristic title with glow
+                      // Futuristic title with glow effect
                       Text(
                         'Access Terminal',
                         style: TextStyle(
-                          fontFamily: 'Orbitron', // Add futuristic font
+                          fontFamily: 'Orbitron',
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -121,6 +125,7 @@ class _FirstScreenState extends State<FirstScreen>
                       ),
                       const SizedBox(height: 30),
 
+                      // Input field with glassmorphism effect
                       BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                         child: Container(
@@ -137,7 +142,7 @@ class _FirstScreenState extends State<FirstScreen>
                                     ColorConstant.accentColor.withOpacity(0.5),
                                 blurRadius: 15,
                                 spreadRadius: 1,
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               ),
                             ],
                             border: Border.all(
@@ -147,7 +152,7 @@ class _FirstScreenState extends State<FirstScreen>
                           ),
                           child: TextField(
                             controller: TextEditingController(),
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               hintText: 'Enter Code',
                               hintStyle: TextStyle(
@@ -163,17 +168,9 @@ class _FirstScreenState extends State<FirstScreen>
                       // Animated button with gradient glow
                       GestureDetector(
                         onTap: () {
-                          // Log button press
-                          print("Submit button pressed.");
-
-                          // Navigate to the second page with the YouTube URL as an argument
                           Navigator.pushNamed(
                             context,
-                            '/second', // Route for the second page
-                            arguments: {
-                              'youtubeUrl':
-                                  'https://www.youtube.com/watch?v=gkD7TbavRwA', // Pass the YouTube URL
-                            },
+                            AppRouter.secondScreen,
                           );
                         },
                         child: MouseRegion(
