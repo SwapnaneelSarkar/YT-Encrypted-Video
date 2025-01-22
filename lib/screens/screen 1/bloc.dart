@@ -11,14 +11,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     VerifyCodeEvent event,
     Emitter<AuthState> emit,
   ) async {
+    print('Event Received: ${event.code}'); // Debug log for received event
     emit(AuthLoading());
+    print('State Emitted: AuthLoading'); // Debug log for loading state
+
     await Future.delayed(Duration(seconds: 2)); // Simulate network request
 
     // Replace with actual backend validation logic
     if (event.code == "1234") {
-      // Example code for validation
+      print('AuthSuccess for code: ${event.code}'); // Debug log for success
       emit(AuthSuccess());
     } else {
+      print('AuthFailure for code: ${event.code}'); // Debug log for failure
       emit(AuthFailure());
     }
   }

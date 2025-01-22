@@ -20,11 +20,14 @@ class _FirstScreenState extends State<FirstScreen>
   late html.VideoElement _videoElement;
   late AnimationController _animationController;
   late Animation<double> _opacityAnimation;
+  final TextEditingController _codeController =
+      TextEditingController(); // Controller for input field
 
   @override
   void initState() {
     super.initState();
 
+    // Initialize animation
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -34,6 +37,7 @@ class _FirstScreenState extends State<FirstScreen>
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
+    // Setup video background
     _videoElement = html.VideoElement()
       ..src = 'assets/matrix.mp4'
       ..autoplay = true
@@ -46,10 +50,11 @@ class _FirstScreenState extends State<FirstScreen>
       ..style.height = '100%'
       ..style.objectFit = 'cover'
       ..style.zIndex = '-1'
-      ..style.opacity = '0.3';
+      ..style.opacity = '0.8';
 
     html.document.body?.append(_videoElement);
 
+    // Start animation
     _animationController.forward();
   }
 
@@ -57,183 +62,183 @@ class _FirstScreenState extends State<FirstScreen>
   void dispose() {
     _videoElement.remove();
     _animationController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthBloc(),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            // Fade-in animation for the video
-            AnimatedBuilder(
-              animation: _opacityAnimation,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _opacityAnimation.value,
-                  child: Container(),
-                );
-              },
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: BlocListener<AuthBloc, AuthState>(
-                  listener: (context, state) {
-                    if (state is AuthSuccess) {
-                      Navigator.pushNamed(
-                        context,
-                        AppRouter.secondScreen,
-                      );
-                    } else if (state is AuthFailure) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Invalid Code')),
-                      );
-                    }
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Futuristic title with glow effect
-                      Text(
-                        'Access Terminal',
-                        style: TextStyle(
-                          fontFamily: 'Orbitron',
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: ColorConstant.accentColor,
-                              blurRadius: 10,
-                              offset: Offset(0, 0),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          // Fade-in animation for video background
+          AnimatedBuilder(
+            animation: _opacityAnimation,
+            builder: (context, child) {
+              return Opacity(
+                opacity: _opacityAnimation.value,
+                child: Container(),
+              );
+            },
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Title with typing animation
+                  SizedBox(
+                    child: DefaultTextStyle(
+                      style: TextStyle(
+                        fontFamily: 'Orbitron',
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            color: ColorConstant.accentColor,
+                            blurRadius: 10,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            'Access Terminal',
+                            speed: const Duration(milliseconds: 100),
+                          ),
+                        ],
+                        totalRepeatCount: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Enter your access code to proceed.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Input field with glassmorphism effect
+                  BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 14.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: ColorConstant.accentColor.withOpacity(0.5),
+                            blurRadius: 15,
+                            spreadRadius: 1,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        border: Border.all(
+                          color: ColorConstant.accentColor,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: TextField(
+                        controller: _codeController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Enter Code',
+                          hintStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Animated submit button with gradient glow
+                  GestureDetector(
+                    onTap: () {
+                      final inputCode = _codeController.text;
+                      if (inputCode == '1234') {
+                        print('Navigating to second screen');
+                        Navigator.pushNamed(
+                          context,
+                          Routes.second,
+                        );
+                      } else {
+                        print('Invalid code entered: $inputCode');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Access Denied: Invalid Code',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              ColorConstant.accentColor,
+                              ColorConstant.accentColor.withOpacity(0.8),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ColorConstant.accentColor.withOpacity(
+                                0.6,
+                              ),
+                              blurRadius: 15,
+                              spreadRadius: 1,
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Enter your access code to proceed.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withOpacity(0.8),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-
-                      // Input field with glassmorphism effect
-                      BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 14.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    ColorConstant.accentColor.withOpacity(0.5),
-                                blurRadius: 15,
-                                spreadRadius: 1,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                            border: Border.all(
-                              color: ColorConstant.accentColor,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: TextField(
-                            controller: TextEditingController(),
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              hintText: 'Enter Code',
-                              hintStyle: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              border: InputBorder.none,
+                        child: const Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
-
-                      // Animated button with gradient glow
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRouter.secondScreen,
-                          );
-                        },
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            height: 50,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  ColorConstant.accentColor,
-                                  ColorConstant.accentColor.withOpacity(0.8),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(25),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorConstant.accentColor.withOpacity(
-                                    0.6,
-                                  ),
-                                  blurRadius: 15,
-                                  spreadRadius: 1,
-                                ),
-                              ],
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      // Loading animation
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          if (state is AuthLoading) {
-                            return SpinKitFadingCircle(
-                              color: ColorConstant.accentColor,
-                              size: 50.0,
-                            );
-                          }
-                          return Container();
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 30),
+
+                  // Loading animation
+                  SpinKitFadingCircle(
+                    color: ColorConstant.accentColor,
+                    size: 50.0,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

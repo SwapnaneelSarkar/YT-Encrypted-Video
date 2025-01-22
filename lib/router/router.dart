@@ -2,24 +2,35 @@ import 'package:flutter/material.dart';
 import '../screens/screen 1/view.dart';
 import '../screens/screen 2/view.dart';
 
-class AppRouter {
-  static const String firstScreen = '/';
-  static const String secondScreen = '/second';
+class Routes {
+  static const String first = '/first';
+  static const String second = '/second';
+}
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case firstScreen:
+class RouteGenerator {
+  static Route<dynamic> getRoute(RouteSettings routeSettings) {
+    switch (routeSettings.name) {
+      case Routes.first:
         return MaterialPageRoute(builder: (_) => FirstScreen());
-      case secondScreen:
-        return MaterialPageRoute(
-          builder: (_) => SecondPage(),
-        );
+
+      case Routes.second:
+        return MaterialPageRoute(builder: (_) => SecondPage());
+
       default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text('Page not found')),
-          ),
-        );
+        return unDefinedRoute();
     }
+  }
+
+  static Route<dynamic> unDefinedRoute() {
+    return MaterialPageRoute(
+      builder: (_) => const Scaffold(
+        body: Center(
+          child: Text(
+            "Page Not Found",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
   }
 }

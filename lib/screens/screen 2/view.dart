@@ -36,7 +36,7 @@ class _SecondPageState extends State<SecondPage> {
   void _createIframe() {
     iframe = html.IFrameElement()
       ..src =
-          'https://www.youtube.com/embed/gkD7TbavRwA?autoplay=1&mute=1&controls=0&modestbranding=1'
+          'https://www.youtube.com/embed/gkD7TbavRwA?autoplay=1&mute=0&controls=0&modestbranding=1'
       ..style.border = 'none'
       ..style.pointerEvents = 'none' // Completely disable pointer events
       ..width = '100%'
