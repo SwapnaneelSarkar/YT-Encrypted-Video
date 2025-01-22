@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../screens/screen 1/view.dart';
+import '../screens/screen 2/view.dart';
 
 class AppRouter {
   static const String firstScreen = '/';
@@ -11,10 +11,15 @@ class AppRouter {
       case firstScreen:
         return MaterialPageRoute(builder: (_) => FirstScreen());
       case secondScreen:
-      //return MaterialPageRoute(builder: (_) => SecondScreen());
+        return MaterialPageRoute(
+          builder: (_) => SecondPage(
+              youtubeUrl: 'https://www.youtube.com/embed/gkD7TbavRwA'),
+        );
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(body: Center(child: Text('Page not found'))),
+          builder: (_) => Scaffold(
+            body: Center(child: Text('Page not found')),
+          ),
         );
     }
   }

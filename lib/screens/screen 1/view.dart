@@ -25,18 +25,15 @@ class _FirstScreenState extends State<FirstScreen>
   void initState() {
     super.initState();
 
-    // Initialize the animation controller for the fade-in effect
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     );
 
-    // Define the opacity animation
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
-    // Initialize the video element for the web
     _videoElement = html.VideoElement()
       ..src = 'assets/matrix.mp4'
       ..autoplay = true
@@ -48,12 +45,11 @@ class _FirstScreenState extends State<FirstScreen>
       ..style.width = '100%'
       ..style.height = '100%'
       ..style.objectFit = 'cover'
-      ..style.zIndex = '-1';
+      ..style.zIndex = '-1'
+      ..style.opacity = '0.3';
 
-    // Add the video element to the DOM
     html.document.body?.append(_videoElement);
 
-    // Start the fade-in animation
     _animationController.forward();
   }
 
@@ -72,7 +68,6 @@ class _FirstScreenState extends State<FirstScreen>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            // Fade-in effect for video background
             AnimatedBuilder(
               animation: _opacityAnimation,
               builder: (context, child) {
@@ -82,7 +77,6 @@ class _FirstScreenState extends State<FirstScreen>
                 );
               },
             ),
-            // Foreground UI
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -127,7 +121,6 @@ class _FirstScreenState extends State<FirstScreen>
                       ),
                       const SizedBox(height: 30),
 
-                      // Input field with glassmorphism
                       BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                         child: Container(
@@ -170,9 +163,18 @@ class _FirstScreenState extends State<FirstScreen>
                       // Animated button with gradient glow
                       GestureDetector(
                         onTap: () {
+                          // Log button press
                           print("Submit button pressed.");
-                          BlocProvider.of<AuthBloc>(context).add(
-                              VerifyCodeEvent(TextEditingController().text));
+
+                          // Navigate to the second page with the YouTube URL as an argument
+                          Navigator.pushNamed(
+                            context,
+                            '/second', // Route for the second page
+                            arguments: {
+                              'youtubeUrl':
+                                  'https://www.youtube.com/watch?v=gkD7TbavRwA', // Pass the YouTube URL
+                            },
+                          );
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,

@@ -19,6 +19,8 @@ dependencies:
   flutter_spinkit: ^5.2.1
   animated_text_kit: ^4.2.2
   video_player: ^2.9.2
+  webview_flutter: ^4.10.0
+  webview_flutter_platform_interface: ^2.10.0
 
 dev_dependencies:
   flutter_test:
@@ -36,10 +38,10 @@ flutter:
   fonts:
     - family: Orbitron
       fonts:
-        - asset: fonts/Orbitron-Regular.ttf
-        - asset: fonts/Orbitron-Bold.ttf
+        - asset: lib/assets/Orbitron/Orbitron-Regular.ttf
+        - asset: lib/assets/Orbitron/Orbitron-Bold.ttf
           weight: 700
-        - asset: fonts/Orbitron-Italic.ttf
+        - asset: lib/assets/Orbitron/Orbitron-VariableFont_wght.ttf
           style: italic
 
 # Notes:
