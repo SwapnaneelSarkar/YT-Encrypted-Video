@@ -1,0 +1,49 @@
+name: encrypted_video
+description: "A futuristic web app with a video background and interactive UI."
+publish_to: 'none' # Private package, not published to pub.dev
+
+# Version and build number
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI and functionality dependencies
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.7
+  flutter_spinkit: ^5.2.1
+  animated_text_kit: ^4.2.2
+  video_player: ^2.9.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - lib/assets/matrix.mp4
+    - web/assets/matrix.mp4
+    - web/matrix.mp4
+
+  fonts:
+    - family: Orbitron
+      fonts:
+        - asset: fonts/Orbitron-Regular.ttf
+        - asset: fonts/Orbitron-Bold.ttf
+          weight: 700
+        - asset: fonts/Orbitron-Italic.ttf
+          style: italic
+
+# Notes:
+# 1. Ensure the `matrix.mp4` file exists at the specified paths.
+# 2. Download and add the Orbitron font files to the `fonts/` directory.
+# 3. The `description` has been updated for clarity.
+# 4. The `sdk` range ensures compatibility with the latest Dart versions.
